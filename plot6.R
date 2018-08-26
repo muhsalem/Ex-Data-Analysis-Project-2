@@ -1,0 +1,12 @@
+library(dplyr)
+NEI <- readRDS("~/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("~/exdata-data-NEI_data/Source_Classification_Code.rds")
+NEISCC <- merge(NEI,SCC,by.x="SCC",by.y="SCC")
+NEISCCVehicle <- NEISCC[which(grepl("Vehicles",NEISCC$EI.Sector)==TRUE),]
+NEISCCVehicle4 <- subset(NEISCCVehicle,NEISCCVehicle$fips=="24510")
+NEISCCVehicle5 <- tapply(NEISCCVehicle4$Emissions,NEISCCVehicle4$year,sum)
+NEISCCVehicle6 <- subset(NEISCCVehicle,NEISCCVehicle$fips=="06037")
+NEISCCVehicle7 <- tapply(NEISCCVehicle6$Emissions,NEISCCVehicle6$year,sum)
+par(mfrow=c(1,2))
+plot(names(NEISCCVehicle5),NEISCCVehicle5,type="b",col="red",xlab="Year",ylab="Total Emissions PM2.5 from Vehicles sources",main="Baltimore") 
+plot(names(NEISCCVehicle7),NEISCCVehicle7,type="b",col="red",xlab="Year",ylab="Total Emissions PM2.5 from Vehicles sources",main="Los Angeles")
